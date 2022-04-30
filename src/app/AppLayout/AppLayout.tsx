@@ -8,10 +8,15 @@ import {
   Page,
   PageHeader,
   PageSidebar,
-  SkipToContent
+  SkipToContent,
+  Button
 } from '@patternfly/react-core';
 import { routes, IAppRoute, IAppRouteGroup } from '@app/routes';
+import {auth, handleLogout, onAuthStateChanged} from '@app/utils/firebase';
 import logo from '@app/bgimages/Patternfly-Logo.svg';
+import { useEffect } from 'react';
+import { Context } from '@app/store/store';
+import { Login } from '@app/Login/Login';
 
 interface IAppLayout {
   children: React.ReactNode;
@@ -30,15 +35,38 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
   const onPageResize = (props: { mobileView: boolean; windowSize: number }) => {
     setIsMobileView(props.mobileView);
   };
+  const history = useHistory();
+
+  const [user, setUser] = React.useState("");
+  const { state, dispatch } = React.useContext(Context) 
+
+  const authListener = () => {
+    onAuthStateChanged(auth, (user)=> {
+      if(user != null){
+        setUser(user.uid);
+        // dispatch({type: "SET_USER", data: user.uid})
+      } else {
+        setUser("");
+      }
+    })
+  }
+  
+  useEffect(() => {
+    authListener();
+  },[])
 
   function LogoImg() {
-    const history = useHistory();
+    // const history = useHistory();
     function handleClick() {
       history.push('/');
     }
     return (
       <img src={logo} onClick={handleClick} alt="PatternFly Logo" />
     );
+  }
+  async function logout(){
+    await handleLogout();
+    history.push('/Login');
   }
 
   const Header = (
@@ -68,15 +96,19 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
       isActive={group.routes.some((route) => route.path === location.pathname)}
     >
       {group.routes.map((route, idx) => route.label && renderNavItem(route, idx))}
+      
     </NavExpandable>
   );
 
-  const Navigation = (
+  const Navigation =  (
     <Nav id="nav-primary-simple" theme="dark">
       <NavList id="nav-list-simple">
         {routes.map(
           (route, idx) => route.label && (!route.routes ? renderNavItem(route, idx) : renderNavGroup(route, idx))
         )}
+        <NavItem id="default-logout" itemId={routes.length+1} onClick={logout}>
+           Logout
+      </NavItem>
       </NavList>
     </Nav>
   );
@@ -99,8 +131,10 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
       Skip to Content
     </SkipToContent>
   );
-  return (
-    <Page
+
+  if(user){
+    return (
+      <Page
       mainContainerId={pageId}
       header={Header}
       sidebar={Sidebar}
@@ -108,7 +142,13 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
       skipToContent={PageSkipToContent}>
       {children}
     </Page>
-  );
+    )
+  }
+  else {
+    return (
+      <Login />
+    )
+  }
 };
 
 export { AppLayout };

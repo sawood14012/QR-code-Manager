@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import {getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { doc, setDoc, collection, getDocs, getDoc} from "firebase/firestore"; 
 // import { getAnalytics } from "firebase/analytics";
@@ -22,6 +23,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app)
 const db = getFirestore(app);
 //const analytics = getAnalytics(app);
 
@@ -57,10 +59,33 @@ async function getTree(id: string){
     }
 }
 
+async function handleLogin(email, password){
+
+  const user = await signInWithEmailAndPassword(auth, email, password)
+  return user;
+}
+
+async function handleSignup(email, password){
+
+  const user = await createUserWithEmailAndPassword(auth, email, password)
+  return user;
+}
+async function handleLogout(){
+  signOut(auth).then(()=>{
+    console.log("signout success")
+  });
+}
+
 export {
     app,
     db,
+    auth,
     addQR,
     getQRs,
-    getTree
+    getTree,
+    handleLogin,
+    handleSignup,
+    signOut,
+    handleLogout,
+    onAuthStateChanged
 }

@@ -1,5 +1,7 @@
+
 export interface StateContext {
     QRs: [];
+    user: string;
     error: string;
     alerts: [];
 }
@@ -10,6 +12,11 @@ const Reducer = (state, action) => {
             return {
                 ...state,
                 QRs: action.data
+            };
+        case 'SET_USER':
+            return {
+                ...state,
+                user: action.data
             };
         case 'SET_ERROR':
             return {

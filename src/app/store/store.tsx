@@ -10,6 +10,7 @@ const initialState = {
     QRs: [],
     error: 'error',
     alerts: [],
+    user: '',
 };
 
 export const Context = React.createContext({} as IContextProps);
