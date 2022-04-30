@@ -22,13 +22,19 @@ import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { getTree } from '@app/utils/firebase';
 import logo from '@app/bgimages/tree.png';
+import { AddDataModal } from './Modal';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const Tree: React.FunctionComponent = () => {
     const params = useParams<{ id: string;}>();
     const [DataPresent, setDataPresent] = useState(false)
     const [loading, setloading] = useState(false)
+    const [isModalOpen, setModalOpen] = React.useState(false)
     const [Data, setData] = useState<any>([])
+
+    const handleModalToggle = () => {
+      setModalOpen(isModalOpen? false : true)
+    }
 
     useEffect(()=>{
         if(params.id != ""){
@@ -53,9 +59,8 @@ const Tree: React.FunctionComponent = () => {
 
 
   function AddData() {
-    const history = useHistory();
     function handleClick() {
-      history.push('/');
+      handleModalToggle()
     }
     return (
       <Button onClick={handleClick}>Add Data</Button>
@@ -69,8 +74,6 @@ const Tree: React.FunctionComponent = () => {
 
   return (
     <PageSection>
-
-        
         {DataPresent && (
             <Flex direction={{ default: 'column' }}>
                 <FlexItem>
@@ -82,8 +85,8 @@ const Tree: React.FunctionComponent = () => {
                 <FlexItem>
                 <DescriptionList columnModifier={{ lg: '3Col' }}>
                     <DescriptionListGroup>
-                    <DescriptionListTerm>Name</DescriptionListTerm>
-                    <DescriptionListDescription>Example</DescriptionListDescription>
+                    <DescriptionListTerm>TreeName</DescriptionListTerm>
+                    <DescriptionListDescription>{Data['TreeName']}</DescriptionListDescription>
                     </DescriptionListGroup>
                     <DescriptionListGroup>
                     <DescriptionListTerm>Namespace</DescriptionListTerm>
@@ -121,6 +124,7 @@ const Tree: React.FunctionComponent = () => {
              The Tree Data is not Present in DB Please ADD
            </EmptyStateBody>
            <AddData />
+           <AddDataModal  id={params.id} isOpen={isModalOpen} handleToggle={handleModalToggle} />
          </EmptyState>
         )}
         
