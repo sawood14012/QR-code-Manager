@@ -7,6 +7,7 @@ import { ProfileSettings } from '@app/Settings/Profile/ProfileSettings';
 import { NotFound } from '@app/NotFound/NotFound';
 import { useDocumentTitle } from '@app/utils/useDocumentTitle';
 import { LastLocationProvider, useLastLocation } from 'react-router-last-location';
+import { Tree } from './Tree/tree';
 
 let routeFocusTimer: number;
 export interface IAppRoute {
@@ -106,6 +107,7 @@ const AppRoutes = (): React.ReactElement => (
           isAsync={isAsync}
         />
       ))}
+      <Route path="/tree/:id" component={Tree} />
       <PageNotFound title="404 Page Not Found" />
     </Switch>
   </LastLocationProvider>

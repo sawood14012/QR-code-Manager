@@ -2,7 +2,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { doc, setDoc, collection, getDocs} from "firebase/firestore"; 
+import { doc, setDoc, collection, getDocs, getDoc} from "firebase/firestore"; 
 // import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -47,10 +47,20 @@ async function getQRs(){
     });
     return result
 }
+async function getTree(id: string){
+    const Document = await getDoc(doc(db, "trees", id))
+    if(Document.exists()){
+        return Document.data()
+    }
+    else {
+        return {}
+    }
+}
 
 export {
     app,
     db,
     addQR,
-    getQRs
+    getQRs,
+    getTree
 }

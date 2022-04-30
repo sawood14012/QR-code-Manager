@@ -101,7 +101,7 @@ const Dashboard: React.FunctionComponent = () => {
         <Divider />
         <br />
 
-       <Grid hasGutter span={3}>
+       <Grid hasGutter sm={6}>
           {state.QRs.map((QR)=>(
             <GridItem key={QR['ID']}>
               <Card isLarge>
