@@ -66,7 +66,7 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
   }
   async function logout(){
     await handleLogout();
-    history.push('/Login');
+    history.push('/');
   }
 
   const Header = (

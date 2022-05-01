@@ -40,6 +40,7 @@ const Login = () => {
       event.preventDefault();
       handleLogin(username,password).then((value) => {
         dispatch({type: "SET_USER", data: value['uid']})
+        localStorage.setItem("UserRole", selectedType);
         history.push(location)
       })
     };

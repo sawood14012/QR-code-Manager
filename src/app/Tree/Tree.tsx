@@ -17,7 +17,7 @@ import {
   DescriptionListGroup,
   DescriptionListTerm,
 } from '@patternfly/react-core';
-import { useHistory, useParams } from 'react-router-dom';
+import { Switch, useHistory, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { getTree } from '@app/utils/firebase';
@@ -31,12 +31,27 @@ const Tree: React.FunctionComponent = () => {
     const [loading, setloading] = useState(false)
     const [isModalOpen, setModalOpen] = React.useState(false)
     const [Data, setData] = useState<any>([])
+    const [EditAccess, setAccess] = useState(false);
 
     const handleModalToggle = () => {
       setModalOpen(isModalOpen? false : true)
     }
 
     useEffect(()=>{
+      const Access = localStorage.getItem("UserRole");
+        if(Access!==null){
+          switch(Access) {
+            case 'Master':
+              setAccess(true)
+              break;
+            case 'Admin':
+              setAccess(true)
+              break;
+            default:
+              setAccess(false)
+              break;
+          }
+        }
         if(params.id != ""){
             setloading(true)
             getTree(params.id).then((value)=>{
@@ -77,7 +92,7 @@ const Tree: React.FunctionComponent = () => {
         {DataPresent && (
             <Flex direction={{ default: 'column' }}>
                 <FlexItem>
-                <Title headingLevel='h1'>Tree id: {params.id}</Title>
+                <Title headingLevel='h1'>Tree id: {Data["id"]}</Title>
                 </FlexItem>
                 <FlexItem>
                     <img style={{ width: 300, height: 300 }} src={logo} />
@@ -89,26 +104,90 @@ const Tree: React.FunctionComponent = () => {
                     <DescriptionListDescription>{Data['TreeName']}</DescriptionListDescription>
                     </DescriptionListGroup>
                     <DescriptionListGroup>
-                    <DescriptionListTerm>Namespace</DescriptionListTerm>
-                    <DescriptionListDescription>
-                        <a href="#">mary-test</a>
-                    </DescriptionListDescription>
+                    <DescriptionListTerm>QRcodeid</DescriptionListTerm>
+                    <DescriptionListDescription>{Data["QRcodeid"]}</DescriptionListDescription>
                     </DescriptionListGroup>
                     <DescriptionListGroup>
-                    <DescriptionListTerm>Labels</DescriptionListTerm>
-                    <DescriptionListDescription>example</DescriptionListDescription>
+                    <DescriptionListTerm>City</DescriptionListTerm>
+                    <DescriptionListDescription>{Data["City"]}</DescriptionListDescription>
+                    </DescriptionListGroup>
+
+                    <DescriptionListGroup>
+                    <DescriptionListTerm>Zone</DescriptionListTerm>
+                    <DescriptionListDescription>{Data["Zone"]}</DescriptionListDescription>
                     </DescriptionListGroup>
                     <DescriptionListGroup>
-                    <DescriptionListTerm>Pod selector</DescriptionListTerm>
-                    <DescriptionListDescription>
-                        <Button variant="link" isInline icon={<PlusCircleIcon />}>
-                        app=MyApp
-                        </Button>
-                    </DescriptionListDescription>
+                    <DescriptionListTerm>Division</DescriptionListTerm>
+                    <DescriptionListDescription>{Data[ "division"]}</DescriptionListDescription>
+                    </DescriptionListGroup>
+
+                    <DescriptionListGroup>
+                    <DescriptionListTerm>Ward</DescriptionListTerm>
+                    <DescriptionListDescription>{Data["ward"]}</DescriptionListDescription>
+                    </DescriptionListGroup>
+
+                    <DescriptionListGroup>
+                    <DescriptionListTerm>GPS </DescriptionListTerm>
+                    <DescriptionListDescription> {Data["gps"]}</DescriptionListDescription>
+                    </DescriptionListGroup>
+
+                    <DescriptionListGroup>
+                    <DescriptionListTerm>Latitude</DescriptionListTerm>
+                    <DescriptionListDescription> {Data["lat"]}</DescriptionListDescription>
                     </DescriptionListGroup>
                     <DescriptionListGroup>
-                    <DescriptionListTerm>Annotation</DescriptionListTerm>
-                    <DescriptionListDescription>2 Annotations</DescriptionListDescription>
+                    <DescriptionListTerm>Longitude</DescriptionListTerm>
+                    <DescriptionListDescription> {Data["long"]}</DescriptionListDescription>
+                    </DescriptionListGroup>
+
+                    <DescriptionListGroup>
+                    <DescriptionListTerm>Common</DescriptionListTerm>
+                    <DescriptionListDescription>{Data["common"]}</DescriptionListDescription>
+                    </DescriptionListGroup>
+
+                    <DescriptionListGroup>
+                    <DescriptionListTerm>Road</DescriptionListTerm>
+                    <DescriptionListDescription>{Data["road"]}</DescriptionListDescription>
+                    </DescriptionListGroup>
+
+                    
+                    <DescriptionListGroup>
+                    <DescriptionListTerm>Railway</DescriptionListTerm>
+                    <DescriptionListDescription>{Data["railway"]}</DescriptionListDescription>
+                    </DescriptionListGroup>
+
+                    <DescriptionListGroup>
+                    <DescriptionListTerm>Tree</DescriptionListTerm>
+                    <DescriptionListDescription>{Data["tree"]}</DescriptionListDescription>
+                    </DescriptionListGroup>
+
+                    <DescriptionListGroup>
+                    <DescriptionListTerm>Scientific Name</DescriptionListTerm>
+                    <DescriptionListDescription>{Data["scientificName"]}</DescriptionListDescription>
+                    </DescriptionListGroup>
+
+                    <DescriptionListGroup>
+                    <DescriptionListTerm>Age</DescriptionListTerm>
+                    <DescriptionListDescription>{Data["Age"]}</DescriptionListDescription>
+                    </DescriptionListGroup>
+
+                    <DescriptionListGroup>
+                    <DescriptionListTerm>Height</DescriptionListTerm>
+                    <DescriptionListDescription>{Data["height"]}</DescriptionListDescription>
+                    </DescriptionListGroup>
+
+                    <DescriptionListGroup>
+                    <DescriptionListTerm>Girth</DescriptionListTerm>
+                    <DescriptionListDescription>{Data["girth"]}</DescriptionListDescription>
+                    </DescriptionListGroup>
+                    <DescriptionListGroup>
+                    <DescriptionListTerm>Land</DescriptionListTerm>
+                    <DescriptionListDescription>{Data["land"]}</DescriptionListDescription>
+                    </DescriptionListGroup>
+
+                    <DescriptionListGroup>
+                    <DescriptionListTerm>Type of Property</DescriptionListTerm>
+                    <DescriptionListDescription>{Data["typeofland"]}</DescriptionListDescription>
                     </DescriptionListGroup>
                 </DescriptionList>
                 </FlexItem>
@@ -123,7 +202,7 @@ const Tree: React.FunctionComponent = () => {
            <EmptyStateBody>
              The Tree Data is not Present in DB Please ADD
            </EmptyStateBody>
-           <AddData />
+           {EditAccess && (<AddData />)}
            <AddDataModal  id={params.id} isOpen={isModalOpen} handleToggle={handleModalToggle} />
          </EmptyState>
         )}
